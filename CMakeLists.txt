@@ -26,28 +26,33 @@ set ( RXSPENCER_LIB_DIR ${CMAKE_INSTALL_PREFIX}/lib )
 set ( RXSPENCER_DATA_DIR ${CMAKE_INSTALL_PREFIX}/share/regex )
 
 if ( MSVC )
-  set ( DEF_FILE librxspencer.def )
+    set ( DEF_FILE librxspencer.def )
 endif ( )
 
 add_library ( regex STATIC ${RXSPENCER_SRCS} ${DEF_FILE} )
 add_library ( regexs SHARED ${RXSPENCER_SRCS} ${DEF_FILE} )
 
 set_target_properties ( regex PROPERTIES PUBLIC_HEADER regex.h VERSION 0.0.3 SOVERSION 0)
-set_target_properties ( regexs PROPERTIES PUBLIC_HEADER regex.h VERSION 0.0.3 SOVERSION 0 OUTPUT_NAME regex-dll)
+
+if ( MSVC )
+    set_target_properties ( regexs PROPERTIES PUBLIC_HEADER regex.h VERSION 0.0.3 SOVERSION 0 OUTPUT_NAME regex-dll)
+else ( )
+    set_target_properties ( regexs PROPERTIES PUBLIC_HEADER regex.h VERSION 0.0.3 SOVERSION 0 OUTPUT_NAME regex)
+endif ( )
 
 target_include_directories ( regex PUBLIC
-  $<INSTALL_INTERFACE:${RXSPENCER_INCLUDE_DIR}>
-  $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}> )
+        $<INSTALL_INTERFACE:${RXSPENCER_INCLUDE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}> )
 
 target_include_directories ( regexs PUBLIC
         $<INSTALL_INTERFACE:${RXSPENCER_INCLUDE_DIR}>
         $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}> )
 
 install ( TARGETS regex
-  RUNTIME DESTINATION ${RXSPENCER_BIN_DIR}
-  LIBRARY DESTINATION ${RXSPENCER_LIB_DIR}
-  ARCHIVE DESTINATION ${RXSPENCER_LIB_DIR}
-  PUBLIC_HEADER DESTINATION ${RXSPENCER_INCLUDE_DIR} )
+        RUNTIME DESTINATION ${RXSPENCER_BIN_DIR}
+        LIBRARY DESTINATION ${RXSPENCER_LIB_DIR}
+        ARCHIVE DESTINATION ${RXSPENCER_LIB_DIR}
+        PUBLIC_HEADER DESTINATION ${RXSPENCER_INCLUDE_DIR} )
 
 install ( TARGETS regexs
         RUNTIME DESTINATION ${RXSPENCER_BIN_DIR}
@@ -57,19 +62,19 @@ install ( TARGETS regexs
 
 # Install docs
 if ( INSTALL_DOCS )
-  set ( RXSPENCER_MAN3_DIR ${CMAKE_INSTALL_PREFIX}/man/man3 )
-  set ( RXSPENCER_MAN7_DIR ${CMAKE_INSTALL_PREFIX}/man/man7 )
-  set ( RXSPENCER_DATA_FILES "COPYRIGHT;README;WHATSNEW" )
+    set ( RXSPENCER_MAN3_DIR ${CMAKE_INSTALL_PREFIX}/man/man3 )
+    set ( RXSPENCER_MAN7_DIR ${CMAKE_INSTALL_PREFIX}/man/man7 )
+    set ( RXSPENCER_DATA_FILES "COPYRIGHT;README;WHATSNEW" )
 
-  install ( FILES ${RXSPENCER_DATA_FILES} DESTINATION ${RXSPENCER_DATA_DIR} )
-  install ( FILES regex.3 DESTINATION ${RXSPENCER_MAN3_DIR} )
-  install ( FILES regex.7 DESTINATION ${RXSPENCER_MAN7_DIR} )
+    install ( FILES ${RXSPENCER_DATA_FILES} DESTINATION ${RXSPENCER_DATA_DIR} )
+    install ( FILES regex.3 DESTINATION ${RXSPENCER_MAN3_DIR} )
+    install ( FILES regex.7 DESTINATION ${RXSPENCER_MAN7_DIR} )
 endif ( )
 
 if ( BUILD_TESTING )
-  enable_testing()
-  add_executable(tester ${RXSPENCER_SRCS} debug.c main.c split.c)
-  add_test(NAME test1 COMMAND sh -c "./tester -f ${CMAKE_CURRENT_SOURCE_DIR}/tests")
-  add_test(NAME test2 COMMAND sh -c "./tester -el -f ${CMAKE_CURRENT_SOURCE_DIR}/tests")
-  add_test(NAME test3 COMMAND sh -c "./tester -er -f ${CMAKE_CURRENT_SOURCE_DIR}/tests")
+    enable_testing()
+    add_executable(tester ${RXSPENCER_SRCS} debug.c main.c split.c)
+    add_test(NAME test1 COMMAND sh -c "./tester -f ${CMAKE_CURRENT_SOURCE_DIR}/tests")
+    add_test(NAME test2 COMMAND sh -c "./tester -el -f ${CMAKE_CURRENT_SOURCE_DIR}/tests")
+    add_test(NAME test3 COMMAND sh -c "./tester -er -f ${CMAKE_CURRENT_SOURCE_DIR}/tests")
 endif ( )
