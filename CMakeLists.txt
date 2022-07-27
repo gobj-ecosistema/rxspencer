@@ -3,9 +3,11 @@
 # Redistribution and use of this file is allowed according to the terms of the MIT license.
 # Please note that the package source code is licensed under its own license.
 
-project ( rxspencer C )
+project ( regex C )
 cmake_minimum_required ( VERSION 3.0 )
-option ( rxshared "build shared library instead of static" OFF )
+
+set(CMAKE_INSTALL_PREFIX /yuneta/development/output)
+
 option ( BUILD_TESTING "build tests" ON )
 option ( INSTALL_DOCS "install documentation" ON )
 
@@ -15,35 +17,43 @@ option ( INSTALL_DOCS "install documentation" ON )
 add_definitions(-DPOSIX_MISTAKE -DREDEBUG)
 #add_compile_options(-Wall -Wextra -pedantic -Wconversion)
 
-# rxspencer library
+# regex library
 set ( CMAKE_INCLUDE_CURRENT_DIR 1 )
 set ( RXSPENCER_SRCS regcomp.c regerror.c regexec.c regfree.c )
-set ( RXSPENCER_INCLUDE_DIR include/rxspencer )
+set ( RXSPENCER_INCLUDE_DIR include/regex )
 set ( RXSPENCER_BIN_DIR bin )
 set ( RXSPENCER_LIB_DIR lib )
-set ( RXSPENCER_DATA_DIR share/rxspencer )
+set ( RXSPENCER_DATA_DIR share/regex )
 
 if ( MSVC )
   set ( DEF_FILE librxspencer.def )
 endif ( )
 
-if ( rxshared )
-  add_library ( rxspencer SHARED ${RXSPENCER_SRCS} ${DEF_FILE} )
-else ( )
-  add_library ( rxspencer STATIC ${RXSPENCER_SRCS} ${DEF_FILE} )
-endif ( )
+add_library ( regex STATIC ${RXSPENCER_SRCS} ${DEF_FILE} )
+add_library ( regexs SHARED ${RXSPENCER_SRCS} ${DEF_FILE} )
 
-set_target_properties ( rxspencer PROPERTIES PUBLIC_HEADER regex.h VERSION 0.0.3 SOVERSION 0)
-target_include_directories ( rxspencer PUBLIC
+set_target_properties ( regex PROPERTIES PUBLIC_HEADER regex.h VERSION 0.0.3 SOVERSION 0)
+set_target_properties ( regexs PROPERTIES PUBLIC_HEADER regex.h VERSION 0.0.3 SOVERSION 0 OUTPUT_NAME regex)
+
+target_include_directories ( regex PUBLIC
   $<INSTALL_INTERFACE:${RXSPENCER_INCLUDE_DIR}>
   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}> )
 
-install ( TARGETS rxspencer
-  EXPORT RXSpencerTargets
+target_include_directories ( regexs PUBLIC
+        $<INSTALL_INTERFACE:${RXSPENCER_INCLUDE_DIR}>
+        $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}> )
+
+install ( TARGETS regex
   RUNTIME DESTINATION ${RXSPENCER_BIN_DIR}
   LIBRARY DESTINATION ${RXSPENCER_LIB_DIR}
   ARCHIVE DESTINATION ${RXSPENCER_LIB_DIR}
   PUBLIC_HEADER DESTINATION ${RXSPENCER_INCLUDE_DIR} )
+
+install ( TARGETS regexs
+        RUNTIME DESTINATION ${RXSPENCER_BIN_DIR}
+        LIBRARY DESTINATION ${RXSPENCER_LIB_DIR}
+        ARCHIVE DESTINATION ${RXSPENCER_LIB_DIR}
+        PUBLIC_HEADER DESTINATION ${RXSPENCER_INCLUDE_DIR} )
 
 # Install docs
 if ( INSTALL_DOCS )
@@ -52,27 +62,9 @@ if ( INSTALL_DOCS )
   set ( RXSPENCER_DATA_FILES "COPYRIGHT;README;WHATSNEW" )
 
   install ( FILES ${RXSPENCER_DATA_FILES} DESTINATION ${RXSPENCER_DATA_DIR} )
-  install ( FILES rxspencer.3 DESTINATION ${RXSPENCER_MAN3_DIR} )
-  install ( FILES rxspencer.7 DESTINATION ${RXSPENCER_MAN7_DIR} )
+  install ( FILES regex.3 DESTINATION ${RXSPENCER_MAN3_DIR} )
+  install ( FILES regex.7 DESTINATION ${RXSPENCER_MAN7_DIR} )
 endif ( )
-
-# generate cmake configuration file
-include ( CMakePackageConfigHelpers )
-if ( NOT DEFINED CMAKE_CONFIG_DEST )
-  set ( CMAKE_CONFIG_DEST lib/cmake/rxspencer )
-endif()
-configure_package_config_file (
-  RXSpencerConfig.cmake.in
-  ${CMAKE_BINARY_DIR}/RXSpencerConfig.cmake
-  INSTALL_DESTINATION ${CMAKE_CONFIG_DEST}
-  PATH_VARS RXSPENCER_INCLUDE_DIR CMAKE_CONFIG_DEST )
-
-install ( EXPORT RXSpencerTargets DESTINATION ${CMAKE_CONFIG_DEST} )
-
-# install the configuration file
-install ( FILES
-  ${CMAKE_CURRENT_BINARY_DIR}/RXSpencerConfig.cmake
-  DESTINATION ${CMAKE_CONFIG_DEST} )
 
 if ( BUILD_TESTING )
   enable_testing()
