@@ -33,7 +33,7 @@ add_library ( regex STATIC ${RXSPENCER_SRCS} ${DEF_FILE} )
 add_library ( regexs SHARED ${RXSPENCER_SRCS} ${DEF_FILE} )
 
 set_target_properties ( regex PROPERTIES PUBLIC_HEADER regex.h VERSION 0.0.3 SOVERSION 0)
-set_target_properties ( regexs PROPERTIES PUBLIC_HEADER regex.h VERSION 0.0.3 SOVERSION 0 OUTPUT_NAME regex)
+set_target_properties ( regexs PROPERTIES PUBLIC_HEADER regex.h VERSION 0.0.3 SOVERSION 0 OUTPUT_NAME regex-dll)
 
 target_include_directories ( regex PUBLIC
   $<INSTALL_INTERFACE:${RXSPENCER_INCLUDE_DIR}>
