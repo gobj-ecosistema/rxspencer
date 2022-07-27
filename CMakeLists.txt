@@ -20,10 +20,10 @@ add_definitions(-DPOSIX_MISTAKE -DREDEBUG)
 # regex library
 set ( CMAKE_INCLUDE_CURRENT_DIR 1 )
 set ( RXSPENCER_SRCS regcomp.c regerror.c regexec.c regfree.c )
-set ( RXSPENCER_INCLUDE_DIR include/regex )
-set ( RXSPENCER_BIN_DIR bin )
-set ( RXSPENCER_LIB_DIR lib )
-set ( RXSPENCER_DATA_DIR share/regex )
+set ( RXSPENCER_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/regex )
+set ( RXSPENCER_BIN_DIR ${CMAKE_INSTALL_PREFIX}/bin )
+set ( RXSPENCER_LIB_DIR ${CMAKE_INSTALL_PREFIX}/lib )
+set ( RXSPENCER_DATA_DIR ${CMAKE_INSTALL_PREFIX}/share/regex )
 
 if ( MSVC )
   set ( DEF_FILE librxspencer.def )
@@ -57,8 +57,8 @@ install ( TARGETS regexs
 
 # Install docs
 if ( INSTALL_DOCS )
-  set ( RXSPENCER_MAN3_DIR man/man3 )
-  set ( RXSPENCER_MAN7_DIR man/man7 )
+  set ( RXSPENCER_MAN3_DIR ${CMAKE_INSTALL_PREFIX}/man/man3 )
+  set ( RXSPENCER_MAN7_DIR ${CMAKE_INSTALL_PREFIX}/man/man7 )
   set ( RXSPENCER_DATA_FILES "COPYRIGHT;README;WHATSNEW" )
 
   install ( FILES ${RXSPENCER_DATA_FILES} DESTINATION ${RXSPENCER_DATA_DIR} )
