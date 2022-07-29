@@ -15,15 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="debug.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="engine.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="regcomp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -34,15 +25,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="regfree.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="split.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cmake-build-debug\cmakefiles\3.22.3\compileridc\CMakeCCompilerId.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cmake-build-debug\cmakefiles\showincludes\main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
