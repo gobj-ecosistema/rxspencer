@@ -3,8 +3,8 @@
 # Redistribution and use of this file is allowed according to the terms of the MIT license.
 # Please note that the package source code is licensed under its own license.
 
-project ( regex C )
 cmake_minimum_required ( VERSION 3.0 )
+project ( regex C )
 
 set(CMAKE_INSTALL_PREFIX /yuneta/development/output)
 
